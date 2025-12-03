@@ -1,0 +1,13 @@
+Polymorphism allows the same function or method to behave differently 
+depending on the object that calls it. In simple terms, it means 
+"many forms". With polymorphism, you can write one common interface 
+(like a function name) and use it for different underlying forms 
+(different class objects). For example, if multiple classes have a 
+function named draw(), calling draw() on a circle object draws a circle, 
+while calling draw() on a rectangle object draws a rectangle — even though 
+the function name is the same. This makes code more flexible, easier to 
+extend, and cleaner because you can work with different types of objects 
+using the same method or interface. 
+
+#It's usually of two types: -> Compile time Polymorphism
+                            -> Run time Polymorphism
