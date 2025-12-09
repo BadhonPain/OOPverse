@@ -11,7 +11,7 @@ public:
         cgpaPtr = new double;
         *cgpaPtr = cgpa;
     }
-    Student(Student &object)
+    Student(const Student &object)
     {
         this->name = object.name;
         cgpaPtr = new double;
