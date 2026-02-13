@@ -1,0 +1,9 @@
+A Friend function is not a member of a class but still has the access of the private members of the class. 
+It's a regular non-member function. (Check General_Use.cpp)
+A member of one class can be a friend of another class. (Check General_Use_2.cpp)
+
+Uses:
+
+1.To do Operator Overloading ;    
+2.Creation of certain types of I/O functions ;
+3.One function to have access to the private members of two or more different class.    
