@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-class Truck;
+class Truck; // Forward declaration
 
 class Car
 {
