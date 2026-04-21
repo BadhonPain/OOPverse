@@ -30,10 +30,10 @@ c.area();                          Circle.getCount();    // Java
 │   static int count = 0;    ← belongs to CLASS        │
 │   static void reset() { }  ← belongs to CLASS        │
 │                                                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌────────────┐ │
-│  │  Object 1    │  │  Object 2    │  │  Object 3  │ │
-│  │  id = 1      │  │  id = 2      │  │  id = 3    │ │
-│  └──────────────┘  └──────────────┘  └────────────┘ │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────┐  │
+│  │  Object 1    │  │  Object 2    │  │  Object 3  │  │
+│  │  id = 1      │  │  id = 2      │  │  id = 3    │  │
+│  └──────────────┘  └──────────────┘  └────────────┘  │
 │                                                      │
 │  Static members exist ONCE at class level            │
 │  Instance members exist per object                   │
