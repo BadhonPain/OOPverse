@@ -7,11 +7,12 @@ class Samp
     char *str;
 
 public:
-    Samp() { str = '\0'; }
+    Samp() { str = nullptr; }
     ~Samp()
     {
         cout << "Destructing..." << endl;
-        delete str;
+        if (str != nullptr)
+            delete str;
     }
 
     void show()
