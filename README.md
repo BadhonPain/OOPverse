@@ -1,117 +1,79 @@
-# OOPverse
+# OOPverse 🌌
 
-> A structured, 9-stage C++ learning workspace — from structs to STL, templates to file I/O.
+> A premium, interactive, bilingual (C++ & Java) workspace covering 13 progressive modules of Object-Oriented Programming (OOP) — from structs to networking, generics to multithreading.
 
-![C++17](https://img.shields.io/badge/C%2B%2B-17-blue?style=flat-square&logo=cplusplus)
-![Modules](https://img.shields.io/badge/modules-9-teal?style=flat-square)
-![Tutorials](https://img.shields.io/badge/tutorials-5-orange?style=flat-square)
-![Level](https://img.shields.io/badge/level-beginner%20→%20advanced-gray?style=flat-square)
-
----
-
-## What this is
-
-OOPverse is a self-contained C++ learning workspace built around a **9-stage progressive curriculum**. Each module introduces a new layer of complexity — you start with raw structs and end with file I/O, exception handling, and the full STL. Five supplementary tutorial files cover Modern C++ idioms (smart pointers, move semantics, lambdas) with deep inline commentary, written as reference material you can return to repeatedly.
-
-**Who it's for:** Students working through OOP for the first time, developers brushing up on Modern C++11/14/17, or anyone who wants a clean, structured reference they can compile and run locally.
+[![C++17](https://img.shields.io/badge/C%2B%2B-17-blue?style=for-the-badge&logo=cplusplus)](https://isocpp.org/)
+[![Java17](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk)](https://openjdk.org/)
+[![CI](https://img.shields.io/github/actions/workflow/status/badhonpain/OOPverse/compile_check.yml?style=for-the-badge&logo=github-actions)](https://github.com/badhonpain/OOPverse/actions)
 
 ---
 
-## Curriculum
+## 🚀 The OOPverse Interactive Runner
 
-The modules are designed to be worked through in order. Each one builds directly on the last.
-
-| # | Module | Core Topics |
-|:--|:-------|:-----------|
-| 01 | **Basics & Structs** | C-style `struct` vs. C++ `class`, memory layouts, basic syntax, data representation |
-| 02 | **Classes & Encapsulation** | Constructors/destructors, static members, class nesting, deep vs. shallow copy, real-world assignments (`TollBooth.cpp`) |
-| 03 | **Inheritance** | Single, multiple, multi-level, hierarchical, and hybrid models. Constructor chaining, virtual destructors, C++ type casting (`static_cast`, `dynamic_cast`, `const_cast`, `reinterpret_cast`) |
-| 04 | **Polymorphism & Overloading** | Compile-time polymorphism (function overloading), run-time polymorphism (virtual functions, abstract classes), operator overloading |
-| 05 | **Templates & Generics** | Function templates, class templates, generic sorting algorithms |
-| 06 | **STL** | Sequential containers (`vector`, `list`, `deque`), associative containers (`map`, `set`), standard algorithms |
-| 07 | **I/O & Manipulators** | Stream formatting, width/precision/fill flags, file stream states, inline functions |
-| 08 | **Exception Handling** | `try`/`catch` blocks, exception propagation, exception-safe code design |
-| 09 | **File Operations** | Text and binary file I/O, sequential and random access (`seekg`/`seekp`), stream state validation |
-
----
-
-## Modern C++ Tutorials
-
-Five standalone reference files with thorough inline commentary covering intermediate and advanced C++17 idioms. These sit alongside the curriculum modules and are worth revisiting even after you've finished the core path.
-
-| Topic | File | What you'll learn |
-|:------|:-----|:------------------|
-| **Memory Management** | `02_Classes_and_Encapsulation/smart_pointers.cpp` | `unique_ptr`, `shared_ptr`, `weak_ptr`, RAII principles, breaking cyclic references |
-| **Move Semantics** | `02_Classes_and_Encapsulation/rule_of_five.cpp` | Lvalue vs. rvalue references (`&&`), `std::move`, implementing the Rule of Five |
-| **Custom Exceptions** | `08_Exception_Handling/custom_exceptions.cpp` | Defining exception hierarchies, overriding `what() noexcept`, catching polymorphically by reference |
-| **Modern STL & Lambdas** | `06_STL/stl_algorithms_lambdas.cpp` | Lambda syntax `[captures](params) -> type {}`, `std::sort` with custom comparators, `std::find_if`, `std::transform` |
-| **Hash Tables** | `06_STL/unordered_containers.cpp` | `unordered_map` vs. `map`, hash tables vs. balanced trees, O(1) vs. O(log N) benchmarks |
-
----
-
-## Compile & Run
-
-Any file in the repository compiles the same way. You need `g++` with C++17 support.
-
-**Step 1 — Compile**
+OOPverse comes with a beautiful, cross-platform interactive command line runner! No need to type long compilation commands or search for paths. 
 
 ```bash
-g++ -std=c++17 <filename>.cpp -o <output_name>
+# On Windows (PowerShell)
+.\play.ps1
+
+# On Linux / macOS (Bash)
+./play.sh
 ```
 
-**Step 2 — Run**
-
-```bash
-# Linux / macOS
-./<output_name>
-
-# Windows (PowerShell)
-.\<output_name>.exe
-```
-
-**Example — running the smart pointers tutorial**
-
-```bash
-g++ -std=c++17 02_Classes_and_Encapsulation/smart_pointers.cpp -o smart_pointers
-
-# Linux / macOS
-./smart_pointers
-
-# Windows
-.\smart_pointers.exe
-```
+### How it works:
+1. **Browse**: Simply use the interactive menu to select one of the 13 modules.
+2. **Choose**: Choose whether you want to run the **C++** or **Java** example.
+3. **Execute**: Select your file. The runner compiles it, prints the output cleanly, and automatically removes binary files afterwards to keep your workspace clean!
 
 ---
 
-## Design Philosophy
+## 📚 13-Module Progressive Curriculum
 
-**Linear by design.** Numbered modules enforce a natural progression — there's no guessing what to study next. Each stage introduces only what the previous one has prepared you for.
+The modules are designed in a strict progressive order, comparing C++ and Java paradigms side-by-side:
 
-**Modern idioms over legacy patterns.** The codebase consistently favors C++11/14/17 constructs: smart pointers over raw `new`/`delete`, range-based loops, `auto`, move semantics, and lambdas. Legacy patterns appear only when teaching them explicitly.
-
-**Commentary as documentation.** The five tutorial files are written to be read, not just run. Inline comments explain the *why* behind each construct, not just the *what*.
-
-**Zero binary clutter.** Compiled binaries are excluded via `.gitignore`. The repository stays source-only, making diffs clean and history readable.
+| # | Module | Core Concepts | C++ Highlights | Java Highlights |
+|:--|:-------|:--------------|:---------------|:----------------|
+| **01** | **Basics & Structs** | Primitive types, scopes, basic I/O, type casting | Struct layouts, pointers, basic namespaces | `BasicIO`, loops, `ArrayDemo`, `MethodDemo` |
+| **02** | **Classes & Encapsulation** | Classes, encapsulation, object lifetimes | Rule of Three/Five, Move semantics, smart pointers | `ClassBasics`, static blocks, `AccessModifiers` |
+| **03** | **Inheritance** | Single/hierarchical/multiple inheritance | Hybrid inheritance, virtual destructors, casting | `SingleInheritance`, Interfaces, `AbstractClass` |
+| **04** | **Polymorphism & Overloading** | Overloading, overrides, virtual tables | Custom operator overloading, explicit conversion | `MethodOverloading`, dynamic dispatch, upcasting |
+| **05** | **Templates & Generics** | Compile-time generic programming | Monomorphization, Class & function templates | Type erasure, bounded wildcards (`extends`/`super`) |
+| **06** | **STL & Collections** | Containers, iterators, standard algorithms | `vector`, `list`, `map`, custom lambda sorting | `ArrayList`, `HashMap`, `HashSet`, Streams API |
+| **07** | **I/O & Manipulators** | Standard streams and text formatting | Formatting manipulators, stream flags, inline | `FormattedOutput`, `ScannerIO`, `StringBuilder` |
+| **08** | **Exception Handling** | Error propagation, safe program teardown | Uncaught exceptions, noexcept, polymorphism | `TryCatchDemo`, Checked exceptions, try-with-resources |
+| **09** | **File Operations** | Read/write text and binary file operations | Stream buffers, random access seekg/seekp | `BufferedReader`, `SerializationDemo` |
+| **10** | **Nested Classes & Enums** | Scoped structures and class encapsulation | Nested struct scopes, scoped enum classes | Inner classes, `AnonymousClass`, enums with fields |
+| **11** | **Multithreading** | Parallel execution and synchronization | Mutex, locks, condition variables, lambdas | JVM monitor synchronization, wait/notify, `join` |
+| **12** | **Networking** | Socket programming and network streams | POSIX sockets, Winsock2 configuration | `ServerSocket`, client-server message loop |
+| **13** | **Command-Line Arguments** | Run-time user inputs and flag parsing | `argc`/`argv` parsing, CLI config structures | `String[] args` parsing, input validation |
 
 ---
 
-## Repository Structure
+## 🛡️ Built-in CI/CD Verification
+
+Every single commit is automatically compiled and verified on a continuous integration pipeline:
+- **C++**: Checked using `g++ -std=c++17`
+- **Java**: Checked using `javac` (JDK 17)
+
+This ensures that the repository remains 100% build-safe and acts as a bulletproof reference sandbox.
+
+---
+
+## 🎨 Contributor & Creator
+
+<div align="center">
 
 ```
-OOPverse/
-├── 01_Basics_and_Structs/
-├── 02_Classes_and_Encapsulation/
-│   ├── smart_pointers.cpp          ← tutorial
-│   └── rule_of_five.cpp            ← tutorial
-├── 03_Inheritance/
-├── 04_Polymorphism_and_Overloading/
-├── 05_Templates_and_Generics/
-├── 06_STL/
-│   ├── stl_algorithms_lambdas.cpp  ← tutorial
-│   └── unordered_containers.cpp    ← tutorial
-├── 07_IO_and_Manipulators/
-├── 08_Exception_Handling/
-│   └── custom_exceptions.cpp       ← tutorial
-├── 09_File_Operations/
-└── .gitignore
+  🌌 OOPverse — Engineered for visual & pedagogical excellence.
 ```
+
+### **Badhon Pain**
+#### **BUET CSE '24**
+*Department of Computer Science & Engineering*
+*Bangladesh University of Engineering and Technology*
+
+---
+
+*"Beautiful code is its own reward, but structured knowledge changes lives."*
+
+</div>

@@ -39,7 +39,7 @@ int main()
     cout << "Enter Student ID: ";
     cin >> stuID;
 
-    tring stuName, stuAdd, stuNum;
+    string stuName, stuAdd, stuNum;
     cout << "Enter Student's Name: ";
     getline(cin, stuName);
 

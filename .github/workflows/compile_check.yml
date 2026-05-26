@@ -1,0 +1,68 @@
+name: OOPverse Compile Check
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  compile-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install C++ compiler
+        run: sudo apt-get update && sudo apt-get install -y g++
+
+      - name: Compile all C++ files
+        run: |
+          echo "=== Compiling C++ files ==="
+          FAIL=0
+          while IFS= read -r file; do
+            echo -n "  Compiling $(basename "$file")... "
+            if g++ -std=c++17 -fsyntax-only "$file" 2>/dev/null; then
+              echo "OK"
+            else
+              echo "FAILED"
+              FAIL=1
+            fi
+          done < <(find . -name '*.cpp' -type f | sort)
+
+          if [ "$FAIL" -eq 1 ]; then
+            echo "::error::Some C++ files failed to compile"
+            exit 1
+          fi
+          echo "All C++ files compiled successfully!"
+
+      - name: Compile all Java files
+        run: |
+          echo "=== Compiling Java files ==="
+          FAIL=0
+          while IFS= read -r file; do
+            DIR=$(dirname "$file")
+            echo -n "  Compiling $(basename "$file")... "
+            pushd "$DIR" > /dev/null
+            if javac "$(basename "$file")" 2>/dev/null; then
+              echo "OK"
+              rm -f *.class
+            else
+              echo "FAILED"
+              FAIL=1
+            fi
+            popd > /dev/null
+          done < <(find . -name '*.java' -type f | sort)
+
+          if [ "$FAIL" -eq 1 ]; then
+            echo "::error::Some Java files failed to compile"
+            exit 1
+          fi
+          echo "All Java files compiled successfully!"
