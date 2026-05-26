@@ -1,6 +1,6 @@
 import java.util.Hashtable;
 
-public class HashtableDemo {
+public class HashTableDemo {
 
     public static void main(String[] args) {
 
