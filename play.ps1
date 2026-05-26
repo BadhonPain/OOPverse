@@ -12,7 +12,7 @@ function Show-Banner {
     Write-Host "  |         " -NoNewline -ForegroundColor Cyan
     Write-Host "OOPverse Runner" -NoNewline -ForegroundColor Yellow
     Write-Host "                |" -ForegroundColor Cyan
-    Write-Host "  |    C++ & Java - Learn by Running Code    |" -ForegroundColor Cyan
+    Write-Host "  |    C++ & Java - Learn by Running Code     |" -ForegroundColor Cyan
     Write-Host "  +-------------------------------------------+" -ForegroundColor Cyan
     Write-Host ""
 }

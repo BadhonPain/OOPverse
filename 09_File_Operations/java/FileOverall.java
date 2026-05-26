@@ -1,14 +1,17 @@
-// BufferedReader, BufferedWriter, and file I/O
+// File I/O demonstration: BufferedReader, BufferedWriter, and NIO (Files class)
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.List;
 
-public class FileReadWrite {
-    public static void main(String[] args) {
-        String filename = "frw_demo.txt";
+public class FileOverall {
 
-        System.out.println("===== Writing with BufferedWriter =====");
+    static void printSection(String title) {
+        System.out.println("\n===== " + title + " =====");
+    }
+
+    static void writeWithBufferedWriter(String filename) {
+        printSection("Writing with BufferedWriter");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("Line 1: Hello from BufferedWriter");
             writer.newLine();
@@ -23,10 +26,11 @@ public class FileReadWrite {
             System.out.println("  Wrote 8 lines to " + filename);
         } catch (IOException e) {
             System.out.println("Write error: " + e.getMessage());
-            return;
         }
+    }
 
-        System.out.println("\n===== Reading with BufferedReader =====");
+    static void readWithBufferedReader(String filename) {
+        printSection("Reading with BufferedReader");
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             int lineNum = 0;
@@ -37,8 +41,10 @@ public class FileReadWrite {
         } catch (IOException e) {
             System.out.println("Read error: " + e.getMessage());
         }
+    }
 
-        System.out.println("\n===== Appending to file =====");
+    static void appendToFile(String filename) {
+        printSection("Appending to file");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write("Line 9: Appended content");
             writer.newLine();
@@ -48,8 +54,10 @@ public class FileReadWrite {
         } catch (IOException e) {
             System.out.println("Append error: " + e.getMessage());
         }
+    }
 
-        System.out.println("\n===== Reading with Files.readAllLines (NIO) =====");
+    static void readWithNIOAllLines(String filename) {
+        printSection("Reading with Files.readAllLines (NIO)");
         try {
             List<String> allLines = Files.readAllLines(Path.of(filename));
             System.out.println("  Total lines: " + allLines.size());
@@ -57,8 +65,10 @@ public class FileReadWrite {
         } catch (IOException e) {
             System.out.println("NIO read error: " + e.getMessage());
         }
+    }
 
-        System.out.println("\n===== Reading as single String =====");
+    static void readAsString(String filename) {
+        printSection("Reading as single String");
         try {
             String content = Files.readString(Path.of(filename));
             System.out.println("  File size: " + content.length() + " characters");
@@ -66,33 +76,40 @@ public class FileReadWrite {
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
 
-        System.out.println("\n===== Writing with Files.writeString (NIO) =====");
-        String nioFile = "frw_nio.txt";
+    static void writeWithNIO(String filename) {
+        printSection("Writing with Files.writeString (NIO)");
         try {
-            Files.writeString(Path.of(nioFile), "Written with NIO\nSecond line\nThird line\n");
-            System.out.println("  Wrote " + nioFile + " with NIO");
-            System.out.println("  Content: " + Files.readString(Path.of(nioFile)).replace("\n", " | "));
+            Files.writeString(Path.of(filename), "Written with NIO\nSecond line\nThird line\n");
+            System.out.println("  Wrote " + filename + " with NIO");
+            System.out.println("  Content: " + Files.readString(Path.of(filename)).replace("\n", " | "));
         } catch (IOException e) {
             System.out.println("NIO write error: " + e.getMessage());
         }
+    }
 
-        System.out.println("\n===== Character-by-character reading =====");
-        try (FileReader fr = new FileReader(nioFile)) {
+    static void readCharByChar(String filename) {
+        printSection("Character-by-character reading");
+        try (FileReader fr = new FileReader(filename)) {
             System.out.print("  Chars: ");
             int ch;
             int count = 0;
             while ((ch = fr.read()) != -1 && count < 20) {
-                if (ch == '\n') System.out.print("\\n");
-                else System.out.print((char) ch);
+                if (ch == '\n')
+                    System.out.print("\\n");
+                else
+                    System.out.print((char) ch);
                 count++;
             }
             System.out.println("...");
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
 
-        System.out.println("\n===== File metadata =====");
+    static void displayFileMetadata(String filename) {
+        printSection("File metadata");
         File file = new File(filename);
         System.out.println("  Name: " + file.getName());
         System.out.println("  Absolute: " + file.getAbsolutePath());
@@ -100,9 +117,39 @@ public class FileReadWrite {
         System.out.println("  Readable: " + file.canRead());
         System.out.println("  Writable: " + file.canWrite());
         System.out.println("  Exists: " + file.exists());
+    }
 
-        new File(filename).delete();
-        new File(nioFile).delete();
-        System.out.println("\nCleanup complete.");
+    static void cleanupFiles(String... filenames) {
+        System.out.println();
+        for (String filename : filenames) {
+            if (new File(filename).delete()) {
+                System.out.println("  Deleted: " + filename);
+            }
+        }
+        System.out.println("Cleanup complete.");
+    }
+
+    public static void main(String[] args) {
+        String filename = "frw_demo.txt";
+        String nioFile = "frw_nio.txt";
+
+        System.out.println("===== FILE I/O OPERATIONS DEMO =====");
+
+        // --- Traditional I/O Stream operations ---
+        writeWithBufferedWriter(filename);
+        readWithBufferedReader(filename);
+        appendToFile(filename);
+
+        // --- NIO File operations ---
+        readWithNIOAllLines(filename);
+        readAsString(filename);
+        writeWithNIO(nioFile);
+
+        // --- Character-level and metadata operations ---
+        readCharByChar(nioFile);
+        displayFileMetadata(filename);
+
+        // --- Cleanup ---
+        cleanupFiles(filename, nioFile);
     }
 }

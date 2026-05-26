@@ -1,4 +1,80 @@
-# Module 02 — Classes and Encapsulation
+# Module 02 — Classes & Encapsulation
+
+## Overview
+Deep dive into object-oriented design: class structure, data hiding, access modifiers, constructors, destructors, lifecycle management, and memory semantics. Contrasts manual C++ memory management with Java's garbage collection.
+
+## Core Concepts
+- **Classes & Objects**: Blueprint for objects
+- **Constructors & Destructors**: Initialization and cleanup
+- **Access Control**: public, private, protected, package-private
+- **Encapsulation**: Data hiding through getters/setters
+- **Static Members**: Shared across all instances
+- **The `this` Pointer/Reference**: Access to current object
+- **Object Lifecycle**: Creation, usage, destruction
+
+## C++ vs Java: Key Differences
+
+| Feature | C++ | Java |
+|---------|-----|------|
+| **Memory** | Manual (`new`/`delete`); can use stack | Automatic garbage collection |
+| **Destructors** | Explicit cleanup required (`~ClassName`) | No destructors; use `finally` or try-with-resources |
+| **Resource Management** | RAII pattern; Rule of 5 | No RAII; relies on GC |
+| **Static** | Shared across instances; linkage control | Shared across instances; simple model |
+| **Const** | Rich const semantics (`const this`) | Final references only |
+| **Copy Semantics** | Shallow/deep copy explicit (copy constructor) | Only shallow reference copying |
+| **Smart Pointers** | `unique_ptr`, `shared_ptr` for safety | No equivalent; GC handles all |
+
+## Notable Features
+
+### C++ Highlights
+✓ **RAII (Resource Acquisition Is Initialization)**: Automatic cleanup via destructors  
+✓ **Rule of 5**: Copy/move constructors and assignment ensure correct semantics  
+✓ **Const Correctness**: Prevents unintended modifications to const objects  
+✓ **Smart Pointers**: Type-safe memory management without manual delete  
+✓ **Copy vs Move**: Differentiate between expensive copies and efficient moves  
+
+### Java Highlights
+✓ **Simplicity**: No manual memory management or destructors  
+✓ **Consistency**: Garbage collection always works (predictable cleanup)  
+✓ **Try-with-resources**: Automatic closing of resources (Java 7+)  
+✓ **Shallow Copying**: Simpler default semantics (references, not value copies)  
+
+## File Organization
+
+### C++ (cpp/)
+- `constructor.cpp`, `constructor_overloading.cpp` — Constructor varieties
+- `copy_constructor.cpp`, `deep_copy.cpp`, `shallow_copy.cpp` — Copy semantics
+- `destructor.cpp` — Cleanup and finalization
+- `encapsulation.cpp` — Data hiding patterns
+- `static_in_variables_1/2.cpp`, `static_in_objects.cpp` — Static members
+- `rule_of_five.cpp` — Modern C++ resource management
+- `smart_pointers.cpp` — Safe memory with unique_ptr, shared_ptr
+- `this_operator.cpp`, `nesting_of_methods.cpp` — Method chaining
+- `dangling_pointer.cpp` — Common pitfalls
+- `object_assignment_*`, `object_passing_*`, `object_returning_*` — Object mechanics
+
+### Java (java/)
+- `ClassBasics.java` — Class structure and fields
+- `StaticDemo.java` — Static members across instances
+- `CopyConstructor.java` — Copy patterns in Java
+- `AccessModifiers.java` — public/private/protected scoping
+- `FriendlyAccess.java` — Package-level access
+
+## Learning Path
+1. Understand class construction and initialization
+2. Master access modifiers and encapsulation
+3. Learn static members and class-level data
+4. Study object lifecycle (creation → usage → cleanup)
+5. Compare C++ RAII vs Java garbage collection
+
+## Key Takeaways
+✓ **Encapsulation**: Hide implementation details behind public interfaces  
+✓ **RAII (C++)**: Ensure resources are always cleaned up properly  
+✓ **Garbage Collection (Java)**: Simplifies memory management at the cost of less predictable timing  
+✓ **Static Members**: Share data and behavior across all instances  
+
+---
+*Solid understanding of encapsulation is critical before moving to inheritance.*
 
 This module explores class design, constructors, destructors, encapsulation, and memory management. It covers the full lifecycle of objects from creation to destruction, including copy/move semantics and smart pointers. Java and C++ take fundamentally different approaches to memory ownership.
 

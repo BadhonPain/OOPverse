@@ -20,7 +20,7 @@ public class StringOperations {
         System.out.println("Index of 'o': " + str3.indexOf('o'));
 
         // StringBuilder for efficient concatenation in loops
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();  // TF:23-24 (this concept & simmilar example )
         for (int i = 0; i < 5; i++) {
             sb.append(i).append(" ");
         }

@@ -1,43 +1,58 @@
-# Module 01 — Basics and Structs
+# Module 01 — Basics & Structs
 
-This module covers foundational programming constructs: basic I/O, arrays, structs, enums, and namespaces. These building blocks are essential before diving into full object-oriented programming. Both C++ and Java share similar syntax roots but diverge in how they handle low-level constructs like structs and enums.
+## Overview
+Foundational programming constructs: primitive types, I/O, arrays, control flow, structs (C++), and basic object structures. These building blocks enable all subsequent OOP concepts.
 
-## C++ vs Java Comparison
+## Core Concepts
+- **Primitive Types**: int, double, boolean, char, float, long
+- **Console I/O**: Reading and writing data
+- **Arrays**: Single and multi-dimensional data collections
+- **Control Flow**: if-else, for, while, do-while, enhanced for-loop
+- **Structs (C++)**: Aggregate data types
+- **Namespaces (C++/Packages (Java)**: Code organization and scope
 
-| Aspect | C++ | Java |
-|--------|-----|------|
-| Structs | First-class `struct` keyword, similar to classes | No structs — use classes or records |
-| Enums | Basic enums and scoped `enum class` | Full enum classes with methods and fields |
-| Namespaces | `namespace` keyword | `package` declarations |
-| Arrays | Raw C-style arrays and `std::array` | Managed arrays with bounds checking |
-| Entry point | `int main()` free function | `public static void main(String[] args)` |
+## C++ vs Java: Key Differences
 
-## Key Differences
+| Feature | C++ | Java |
+|---------|-----|------|
+| **Structs** | First-class type; members public by default | No struct keyword; use classes instead |
+| **Namespaces** | Flexible nesting and re-opening | Packages mapped to directory hierarchy |
+| **Arrays** | Decay to pointers; bounds unchecked | Objects with `.length` property; bounds-safe |
+| **Memory** | Stack/heap management explicit | Garbage collected automatically |
+| **I/O** | `iostream` streams (cout, cin) | `System.in/.out`, `Scanner`, `PrintWriter` |
 
-- C++ structs are nearly identical to classes (default `public`); Java has no struct equivalent
-- C++ `enum class` provides type safety; Java enums are full objects with constructors and methods
-- C++ namespaces are flexible and can be nested/reopened; Java packages map to directory structure
-- C++ arrays decay to pointers; Java arrays are objects with a `.length` property
+## Notable Features
 
-## Files in This Module
+### C++ Highlights
+✓ **Type-safe Enumerations**: `enum class` prevents implicit int conversions  
+✓ **Direct Memory Control**: Understand struct layout and data organization  
+✓ **Namespace Flexibility**: Hierarchical and reopenable namespaces  
 
-### C++ (`cpp/`)
+### Java Highlights
+✓ **Enhanced For-Loop**: Cleaner syntax for arrays and collections  
+✓ **Unified Object Model**: Everything inherits from Object  
 
-| File | Description |
-|------|-------------|
-| `01_struct.c` | Basic C-style struct usage |
-| `02_struct_1.cpp` | Struct fundamentals in C++ |
-| `03_struct_2.cpp` | Advanced struct usage |
-| `04_class.cpp` | Transition from struct to class |
-| `06_Polymorphism.cpp` | Early polymorphism preview |
-| `array_with_objects.cpp` | Arrays containing struct/class objects |
-| `basic_2.cpp` | Basic syntax and I/O |
-| `basic_syntax.cpp` | Core C++ syntax demonstration |
+## File Organization
 
-### Java (`java/`)
+### C++ (cpp/)
+- `basic_syntax.cpp` — Language fundamentals
+- `basic_2.cpp` — I/O and loops
+- `02_struct_1.cpp`, `03_struct_2.cpp`, `04_class.cpp` — Struct progression
+- `array_with_objects.cpp` — Object aggregation
 
-| File | Description |
-|------|-------------|
-| `BasicIO.java` | Standard input/output operations |
-| `ArrayDemo.java` | Array creation, traversal, and manipulation |
-| `MethodDemo.java` | Method declarations and invocations |
+### Java (java/)
+- `BasicIO.java` — Console input/output
+- `ArrayDemo.java`, `ArrayDemo2.java` — Array operations
+- `MultiDimArrays.java` — 2D and 3D arrays
+- `MethodDemo.java` — Method calling
+- `ForEachTest.java` — Enhanced for-loop
+
+## Learning Path
+1. Understand I/O basics (read/write operations)
+2. Master arrays (indexing, iteration, multi-dimensional)
+3. Learn control flow (conditionals and loops)
+4. Create structs/classes (data grouping)
+5. Practice method calls and parameter passing
+
+---
+*Foundation for all OOP concepts that follow.*

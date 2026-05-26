@@ -1,4 +1,4 @@
-public class InterfaceDemo {
+public class InterfaceDemo_AllInOne {
 
     // Basic interface
     interface Drawable {

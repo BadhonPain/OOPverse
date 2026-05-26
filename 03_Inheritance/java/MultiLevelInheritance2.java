@@ -1,4 +1,4 @@
-public class MultiLevelInheritance {
+public class MultiLevelInheritance2 {
 
     // Grandparent
     static class Vehicle {
