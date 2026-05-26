@@ -7,7 +7,7 @@ class Samp
     char *str;
 
 public:
-    Samp() { str = '\0'; }
+    Samp() { str = nullptr; }
     ~Samp()
     {
         cout << "Destructing..." << endl;
@@ -36,7 +36,7 @@ Samp input()
 int main()
 {
     Samp ob;
-    ob = input();
+    // ob = input(); -> run this, removing comment and see the problem
     ob.show();
     return 0;
 }

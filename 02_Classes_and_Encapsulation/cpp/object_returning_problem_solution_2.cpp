@@ -25,10 +25,11 @@ public:
         strcpy(str, s);
     }
 
-    Samp &operator=(const Samp &obj)
+    Samp &operator=(const Samp &obj) // object assignment operator
     {
         if (this == &obj)
             return *this;
+        delete str;
         str = new char[strlen(obj.str) + 1];
         strcpy(str, obj.str);
         return *this;

@@ -20,7 +20,8 @@ public:
     }
     void setName(char arr[], int size)
     {
-        strcpy(name, arr);
+        strncpy(name, arr, sizeof(name) - 1);
+        name[sizeof(name) - 1] = '\0';
     }
     string getName()
     {
@@ -51,7 +52,7 @@ int main()
     s1.setRoll(s_roll);
     cout << "Roll no is: " << s1.getRoll() << endl;
     cout << "Enter Name: ";
-    gets(s_name);
+    cin.getline(s_name, sizeof(s_name));
     s1.setName(s_name, sizeof(s_name));
     cout << "Name is: " << s1.getName() << endl;
     cout << "Enter CGPA: ";
