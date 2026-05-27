@@ -17,12 +17,18 @@ class Box {
     }
 
     // default cube with side 1
-    Box() { width = height = depth = 1; }
+    Box() {
+        width = height = depth = 1;
+    }
 
     // cube with given side length
-    Box(double len) { width = height = depth = len; }
+    Box(double len) {
+        width = height = depth = len;
+    }
 
-    double volume() { return width * height * depth; }
+    double volume() {
+        return width * height * depth;
+    }
 }
 
 public class SuperTest {

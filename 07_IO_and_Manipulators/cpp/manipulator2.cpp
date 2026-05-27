@@ -22,8 +22,9 @@ istream &hex_input(istream &in)
 
 int main()
 {
-    int number;
-    cout << "Enter a hexadecimal Number: ";
-    cin >> hex_input >> number;
+    int number = 255;
+    // cout << "Enter a hexadecimal Number: ";
+    // cin >> hex_input >> number;
+    cout<<"Decimal: 255"<<endl;
     cout << setup << number << endl;
 }
