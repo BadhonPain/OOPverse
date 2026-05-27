@@ -213,6 +213,14 @@ This ensures OOPverse is always in a **100% build-safe state** and can be truste
 
 ---
 
+## 🙏 Acknowledgements
+ 
+The code examples, concepts, and learning structure throughout OOPverse are largely inspired by and in many cases directly derived from the lecture materials, slides, and teachings of the faculty members of the **Department of Computer Science & Engineering, Bangladesh University of Engineering and Technology (BUET)**. Their structured and rigorous approach to teaching Object-Oriented Programming formed the academic foundation upon which this entire repository is built.
+ 
+Sincere gratitude to all the instructors whose guidance — both inside and outside the classroom — made this work possible.
+ 
+---
+
 ## 📄 Reference Material
 
 The repository includes **`Materials/OOP QB BUET_TF.pdf`** — a curated OOP question bank made by BUET CSE'24 students. It is useful for exam preparation and self-assessment alongside the code examples.
