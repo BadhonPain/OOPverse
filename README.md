@@ -180,6 +180,17 @@ The modules are designed in strict progressive order. Each module builds on the 
 
 ---
 
+## ⚠️ Known Limitations
+ 
+- **Interactive programs are not supported** in the Web UI runner. Any file that requires user input during execution (e.g. `cin`, `Scanner`) will wait indefinitely for input, and after **15 seconds** the runner will automatically terminate the process and display:
+  ```
+  ❌ Error:
+  ⏱️ Program execution timeout (15 seconds exceeded)
+  ```
+  This is a known limitation and will be addressed in a future update.
+- For such files, it is recommended to use the **CLI runner** (`play.sh` / `play.ps1`) instead, where standard input works as expected.
+---
+
 ## 🛠️ Tech Stack
 
 | Layer | Technology | Purpose |
