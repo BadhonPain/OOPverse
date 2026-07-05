@@ -180,6 +180,17 @@ The modules are designed in strict progressive order. Each module builds on the 
 
 ---
 
+## ⚠️ Known Limitations
+ 
+- **Interactive programs are not supported** in the Web UI runner. Any file that requires user input during execution (e.g. `cin`, `Scanner`) will wait indefinitely for input, and after **15 seconds** the runner will automatically terminate the process and display:
+  ```
+  ❌ Error:
+  ⏱️ Program execution timeout (15 seconds exceeded)
+  ```
+  This is a known limitation and will be addressed in a future update.
+- For such files, it is recommended to use the **CLI runner** (`play.sh` / `play.ps1`) instead, where standard input works as expected.
+---
+
 ## 🛠️ Tech Stack
 
 | Layer | Technology | Purpose |
@@ -211,6 +222,14 @@ This ensures OOPverse is always in a **100% build-safe state** and can be truste
 
 **Workflow file:** `.github/workflows/compile_check.yml`
 
+---
+
+## 🙏 Acknowledgements
+ 
+The code examples, concepts, and learning structure throughout OOPverse are largely inspired by and in many cases directly derived from the lecture materials, slides, and teachings of the faculty members of the **Department of Computer Science & Engineering, Bangladesh University of Engineering and Technology (BUET)**. Their structured and rigorous approach to teaching Object-Oriented Programming formed the academic foundation upon which this entire repository is built.
+ 
+Sincere gratitude to all the instructors whose guidance — both inside and outside the classroom — made this work possible.
+ 
 ---
 
 ## 📄 Reference Material
