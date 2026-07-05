@@ -1,14 +1,21 @@
 // OOPverse Web UI Runner - Backend (Node.js + Express)
-// Install: npm install express
+// Install: npm install express ws node-pty
 // Run: npm start OR node play-server.js
 // Then open: http://localhost:3000
+//
+// Two run modes are supported:
+//   1) Judge style   -> POST /api/run          (all stdin supplied upfront, one-shot response)
+//   2) Interactive   -> WebSocket /ws/run       (real PTY, live streaming in/out, like a real terminal)
 
 const express = require('express');
-const { exec } = require('child_process');
+const { exec, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const app = express();
+const http = require('http');
+const WebSocket = require('ws');
+const pty = require('node-pty');
 
+const app = express();
 const PORT = 3000;
 const ROOT_DIR = __dirname;
 
@@ -84,59 +91,178 @@ app.get('/code/:module/:language/:file', (req, res) => {
     });
 });
 
-// Compile and run a file
+// ---------------------------------------------------------------------------
+// JUDGE-STYLE RUN — all stdin supplied upfront, single JSON response
+// ---------------------------------------------------------------------------
 app.post('/api/run', (req, res) => {
-    const { moduleName, language, fileName } = req.body;
+    const { moduleName, language, fileName, input } = req.body;
     const filePath = path.join(ROOT_DIR, moduleName, language, fileName);
 
     if (!fs.existsSync(filePath)) {
-        return res.json({
-            success: false,
-            error: 'File not found: ' + filePath,
-            output: ''
-        });
+        return res.json({ success: false, error: 'File not found: ' + filePath, output: '' });
     }
 
-    let command;
     const workDir = path.dirname(filePath);
+    const stdinData = (input || '') + '\n';
 
+    let compileCmd, runCmdName, runArgs;
     if (language === 'cpp') {
-        const outFile = path.join(workDir, fileName.replace('.cpp', '.exe'));
-        // Windows: compile and run, then delete exe
-        // Split into: compile, run, cleanup steps for better error reporting
-        command = `cd /d "${workDir}" && g++ -std=c++17 -o "${outFile}" "${fileName}" 2>&1 && "${outFile}" 2>&1 && del /q "${outFile}" 2>nul`;
+        const outFile = fileName.replace('.cpp', '.exe');
+        compileCmd = `g++ -std=c++17 -o "${outFile}" "${fileName}"`;
+        runCmdName = path.join(workDir, outFile);
+        runArgs = [];
     } else {
         const className = fileName.replace('.java', '');
-        // Windows: compile and run, then delete class files
-        command = `cd /d "${workDir}" && javac "${fileName}" 2>&1 && java "${className}" 2>&1 && del /q *.class 2>nul`;
+        compileCmd = `javac "${fileName}"`;
+        runCmdName = 'java';
+        runArgs = [className];
     }
 
-    exec(command, { timeout: 15000, shell: 'cmd.exe', maxBuffer: 10 * 1024 * 1024 }, (error, stdout, stderr) => {
-        let output = stdout || '';
-        let errorMsg = stderr || '';
-
-        // For better UX, combine stdout and stderr
-        if (error) {
-            // If there's stderr, use it as the error message
-            if (stderr) {
-                errorMsg = stderr;
-            } else if (error.killed) {
-                errorMsg = '⏱️ Program execution timeout (15 seconds exceeded)';
-            } else {
-                errorMsg = error.message;
-            }
+    exec(compileCmd, { cwd: workDir, timeout: 15000, shell: 'cmd.exe', maxBuffer: 10 * 1024 * 1024 }, (compileErr, _stdout, compileStderr) => {
+        if (compileErr) {
+            return res.json({ success: false, output: '', error: compileStderr || compileErr.message });
         }
 
-        res.json({
-            success: !error,
-            output: output || '',
-            error: errorMsg || '',
-            fileName
+        const child = spawn(runCmdName, runArgs, { cwd: workDir, shell: true, timeout: 15000 });
+        let stdout = '', stderr = '', timedOut = false;
+
+        const killTimer = setTimeout(() => {
+            timedOut = true;
+            child.kill();
+        }, 15000);
+
+        child.stdout.on('data', d => stdout += d);
+        child.stderr.on('data', d => stderr += d);
+        child.stdin.write(stdinData);
+        child.stdin.end();
+
+        child.on('close', (code) => {
+            clearTimeout(killTimer);
+            cleanupArtifacts(language, workDir, fileName);
+            if (timedOut) {
+                return res.json({ success: false, output: stdout, error: '⏱️ Program execution timeout (15 seconds exceeded) — it may be waiting for more input than you provided.' });
+            }
+            res.json({ success: code === 0, output: stdout, error: stderr, fileName });
+        });
+
+        child.on('error', (err) => {
+            clearTimeout(killTimer);
+            res.json({ success: false, output: '', error: err.message });
         });
     });
 });
 
-app.listen(PORT, () => {
+function cleanupArtifacts(language, workDir, fileName) {
+    if (language === 'cpp') {
+        fs.unlink(path.join(workDir, fileName.replace('.cpp', '.exe')), () => {});
+    } else {
+        fs.readdir(workDir, (e, files) => {
+            if (!e) files.filter(f => f.endsWith('.class')).forEach(f => fs.unlink(path.join(workDir, f), () => {}));
+        });
+    }
+}
+
+// ---------------------------------------------------------------------------
+// INTERACTIVE RUN — real PTY over WebSocket, live streaming both ways
+// ---------------------------------------------------------------------------
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server, path: '/ws/run' });
+
+const RUN_TIMEOUT_MS = 60000; // interactive sessions get more slack than judge mode
+
+wss.on('connection', (ws) => {
+    let ptyProcess = null;
+    let killTimer = null;
+    let workDir = null, language = null, fileName = null;
+
+    const send = (obj) => {
+        if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
+    };
+
+    ws.on('message', (raw) => {
+        let msg;
+        try { msg = JSON.parse(raw); } catch { return; }
+
+        if (msg.type === 'start') {
+            ({ language } = msg);
+            fileName = msg.fileName;
+            const filePath = path.join(ROOT_DIR, msg.moduleName, language, fileName);
+
+            if (!fs.existsSync(filePath)) {
+                send({ type: 'error', data: 'File not found: ' + filePath });
+                return ws.close();
+            }
+            workDir = path.dirname(filePath);
+
+            let compileCmd, runCmd;
+            if (language === 'cpp') {
+                const outFile = fileName.replace('.cpp', '.exe');
+                compileCmd = `g++ -std=c++17 -o "${outFile}" "${fileName}"`;
+                runCmd = outFile; // no quotes: generated filenames never contain spaces
+            } else {
+                const className = fileName.replace('.java', '');
+                compileCmd = `javac "${fileName}"`;
+                runCmd = `java ${className}`; // no quotes around className — Java class names can't contain spaces, and quoting here corrupts the arg through node-pty's Windows command-line reconstruction
+            }
+
+            send({ type: 'status', data: 'Compiling...' });
+
+            exec(compileCmd, { cwd: workDir, timeout: 15000, shell: 'cmd.exe', maxBuffer: 10 * 1024 * 1024 }, (err, _stdout, stderr) => {
+                if (err) {
+                    send({ type: 'error', data: stderr || err.message });
+                    return ws.close();
+                }
+
+                send({ type: 'status', data: 'Running...' });
+
+                try {
+                    // Spawn via cmd.exe /c so Windows resolves the executable / PATH
+                    // (java, relative .exe) the same reliable way exec() already does —
+                    // node-pty's direct spawn doesn't do PATH lookups on Windows.
+                    ptyProcess = pty.spawn('cmd.exe', ['/c', runCmd], {
+                        name: 'xterm-color',
+                        cols: msg.cols || 100,
+                        rows: msg.rows || 30,
+                        cwd: workDir,
+                        env: process.env
+                    });
+                } catch (spawnErr) {
+                    send({ type: 'error', data: 'Failed to start interactive process: ' + spawnErr.message });
+                    return ws.close();
+                }
+
+                killTimer = setTimeout(() => {
+                    send({ type: 'output', data: '\r\n⏱️ Timeout (60s) — process killed.\r\n' });
+                    ptyProcess.kill();
+                }, RUN_TIMEOUT_MS);
+
+                ptyProcess.onData((chunk) => send({ type: 'output', data: chunk }));
+
+                ptyProcess.onExit(({ exitCode }) => {
+                    clearTimeout(killTimer);
+                    send({ type: 'exit', code: exitCode });
+                    cleanupArtifacts(language, workDir, fileName);
+                });
+            });
+            return;
+        }
+
+        if (msg.type === 'input' && ptyProcess) {
+            ptyProcess.write(msg.data);
+        }
+
+        if (msg.type === 'resize' && ptyProcess) {
+            try { ptyProcess.resize(msg.cols, msg.rows); } catch {}
+        }
+    });
+
+    ws.on('close', () => {
+        clearTimeout(killTimer);
+        if (ptyProcess) ptyProcess.kill();
+    });
+});
+
+server.listen(PORT, () => {
     console.log(`\n╔════════════════════════════════════════╗`);
     console.log(`║    OOPverse Web UI Runner              ║`);
     console.log(`║    🌌 http://localhost:${PORT}            ║`);
