@@ -1,12 +1,14 @@
 {
   "name": "oopverse-runner",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Interactive C++ & Java OOP Runner",
   "main": "play-server.js",
   "scripts": {
     "start": "node play-server.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "ws": "^8.16.0",
+    "node-pty": "^1.0.0"
   }
 }
